@@ -7,10 +7,13 @@ import FormErrors from './FormErrors'
 
 import validations from '../validations'
 
+import './Eventlite.css'
+
 class Eventlite extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      events: [],
       title: {value: '', valid: false},
       start_datetime: {value: '', valid: false},
       location: {value: '', valid: false},
@@ -22,12 +25,14 @@ class Eventlite extends React.Component {
 
   componentDidMount() {
     axios({
-      method: 'GET',
-      url: 'http://localhost:3001/events'
-    })
-    .then(response => {
-      this.setState({events: response.data})
-    })
+        method: 'GET',
+        url: 'http://localhost:3001/events'
+      })
+      .then(response => {
+        this.setState({
+          events: response.data
+        })
+      })
   }
 
   static formValidations = {
@@ -61,13 +66,10 @@ class Eventlite extends React.Component {
     }
     axios({
         method: 'POST',
-        url: '/events',
+        url: 'http://localhost:3001/events',
         data: {
           event: newEvent
         },
-        headers: {
-          'X-CSRF-Token': document.querySelector("meta[name=csrf-token]").content
-        }
       })
       .then(response => {
         this.addNewEvent(response.data)
@@ -110,12 +112,7 @@ class Eventlite extends React.Component {
     const events = [...this.state.events, event].sort(function(a, b){
       return new Date(a.start_datetime) - new Date(b.start_datetime)
     })
-    this.setState({events: events}, this.changeLogoColour)
-  }
-
-  changeLogoColour = () => {
-    const colors = ["red", "blue", "green", "violet"]
-    this.logo.current.style.color = colors[Math.floor(Math.random() * colors.length)]
+    this.setState({events: events})
   }
 
   render() {
