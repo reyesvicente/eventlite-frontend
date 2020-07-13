@@ -1,12 +1,19 @@
-import React from 'react';
+import React from 'react'
+import Login from './components/Login'
 import Eventlite from './components/Eventlite'
+
+const currentUser = function() {
+  const user = localStorage.getItem('user')
+  console.log(user)
+  return(user)
+}
 
 function App() {
   return (
     <div className="App">
-      <Eventlite />
+      {currentUser() ? <Eventlite /> : <Login />}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
