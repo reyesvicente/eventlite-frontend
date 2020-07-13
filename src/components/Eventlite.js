@@ -1,11 +1,11 @@
 import React from 'react'
 import axios from 'axios'
+import validations from '../validations'
 
 import EventsList from './EventList'
 import EventForm from './EventForm'
 import FormErrors from './FormErrors'
 
-import validations from '../validations'
 import './Eventlite.css'
 
 class Eventlite extends React.Component {
@@ -19,7 +19,6 @@ class Eventlite extends React.Component {
       formErrors: {},
       formValid: false
     }
-    this.logo = React.createRef()
   }
 
   static formValidations = {
@@ -56,31 +55,21 @@ class Eventlite extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault()
-    let newEvent = {
-      title: this.state.title.value,
-      start_datetime: this.state.start_datetime.value,
-      location: this.state.location.value
-    }
+    let newEvent = { title: this.state.title.value, start_datetime: this.state.start_datetime.value, location: this.state.location.value }
     axios({
-        method: 'POST',
-        url: '/events',
-        data: {
-          event: newEvent
-        },
-        headers: {
-          'X-CSRF-Token': document.querySelector("meta[name=csrf-token]").content
-        }
-      })
-      .then(response => {
-        this.addNewEvent(response.data)
-        this.resetFormErrors()
-      })
-      .catch(error => {
-        console.log(error.response.data)
-        this.setState({
-          formErrors: error.response.data
-        })
-      })
+      method: 'POST',
+      url: 'http://localhost:3001/events',
+      headers: JSON.parse(localStorage.user),
+      data: { event: newEvent }
+    })
+    .then(response => {
+      this.addNewEvent(response.data)
+      this.resetFormErrors();
+    })
+    .catch(error => {
+      console.log(error.response.data)
+      this.setState({formErrors: error.response.data})
+    })
   }
 
   validateField(fieldName, fieldValue, fieldValidations) {
@@ -112,18 +101,12 @@ class Eventlite extends React.Component {
     const events = [...this.state.events, event].sort(function(a, b){
       return new Date(a.start_datetime) - new Date(b.start_datetime)
     })
-    this.setState({events: events}, this.changeLogoColour)
-  }
-
-  changeLogoColour = () => {
-    const colors = ["red", "blue", "green", "violet"]
-    this.logo.current.style.color = colors[Math.floor(Math.random() * colors.length)]
+    this.setState({events: events})
   }
 
   render() {
     return (
       <div>
-        <h1 className="logo" ref={this.logo}>Eventlite</h1>
         <FormErrors formErrors = {this.state.formErrors} />
         <EventForm handleSubmit = {this.handleSubmit}
           handleInput = {this.handleInput}
