@@ -1,12 +1,11 @@
 import React from 'react'
 import axios from 'axios'
 
-import EventsList from './EventsList'
+import EventsList from './EventList'
 import EventForm from './EventForm'
 import FormErrors from './FormErrors'
 
 import validations from '../validations'
-
 import './Eventlite.css'
 
 class Eventlite extends React.Component {
@@ -23,18 +22,6 @@ class Eventlite extends React.Component {
     this.logo = React.createRef()
   }
 
-  componentDidMount() {
-    axios({
-        method: 'GET',
-        url: 'http://localhost:3001/events'
-      })
-      .then(response => {
-        this.setState({
-          events: response.data
-        })
-      })
-  }
-
   static formValidations = {
     title: [
       (value) => { return(validations.checkMinLength(value, 3)) }
@@ -46,6 +33,16 @@ class Eventlite extends React.Component {
     location: [
       (value) => { return(validations.checkMinLength(value, 1)) }
     ]
+  }
+
+  componentDidMount() {
+    axios({
+      method: 'GET',
+      url: 'http://localhost:3001/events'
+    })
+    .then(response => {
+      this.setState({events: response.data})
+    })
   }
 
   handleInput = e => {
@@ -66,10 +63,13 @@ class Eventlite extends React.Component {
     }
     axios({
         method: 'POST',
-        url: 'http://localhost:3001/events',
+        url: '/events',
         data: {
           event: newEvent
         },
+        headers: {
+          'X-CSRF-Token': document.querySelector("meta[name=csrf-token]").content
+        }
       })
       .then(response => {
         this.addNewEvent(response.data)
@@ -112,7 +112,12 @@ class Eventlite extends React.Component {
     const events = [...this.state.events, event].sort(function(a, b){
       return new Date(a.start_datetime) - new Date(b.start_datetime)
     })
-    this.setState({events: events})
+    this.setState({events: events}, this.changeLogoColour)
+  }
+
+  changeLogoColour = () => {
+    const colors = ["red", "blue", "green", "violet"]
+    this.logo.current.style.color = colors[Math.floor(Math.random() * colors.length)]
   }
 
   render() {
