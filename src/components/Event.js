@@ -1,23 +1,25 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const formatDate = datetime =>
-  new Date(datetime).toDateString()
+	new Date(datetime).toDateString()
 
-const Event = props => (
-  <div className="event">
-    <h2 className="event-title">{props.event.title}</h2>
-    <div className="event-datetime">{formatDate(props.event.start_datetime)}</div>
-    <div className="event-location">{props.event.location}</div>
-  </div>
-)
+class Event extends React.Component {
+		constructor(props) {
+			super(props)
+			this.state = {
+				event: {}
+			}
+		}
 
-Event.propTypes = {
-  event: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    start_datetime: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired
-  })
+	render() {
+		return (
+		<div className="event">
+			<h2 className="event-title">{this.state.event.title}</h2>
+			<div className="event-datetime">{formatDate(this.state.event.start_datetime)}</div>
+			<div className="event-location">{this.state.event.location}</div>
+		</div>
+		)
+	}
 }
 
 export default Event

@@ -3,6 +3,7 @@ import Login from './components/Login'
 import Signup from './components/Signup'
 import AppHeader from './components/AppHeader'
 import Eventlite from './components/Eventlite'
+import Event from './components/Event'
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom"
 
 
@@ -21,6 +22,9 @@ function App() {
       </Route>
       <Route exact path="/signup">
         {currentUser ? <Redirect to="/" /> : <Signup />}
+      </Route>
+      <Route exact path="/events/:id">
+        <Event />
       </Route>
     </Router>
   )
