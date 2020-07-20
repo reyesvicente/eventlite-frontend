@@ -15,12 +15,4 @@ const EventSummary = props => (
   </div>
 )
 
-Event.propTypes = {
-  event: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    start_datetime: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired
-  })
-}
-
 export default EventSummary
