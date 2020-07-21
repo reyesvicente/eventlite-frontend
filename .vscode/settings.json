@@ -4,5 +4,8 @@
 	],
 	"cSpell.ignoreWords": [
 		"href"
-	]
+	],
+	"editor.fontSize": 19,
+	"editor.fontFamily": "Fira Code",
+	"gitlens.statusBar.dateFormat": ""
 }
