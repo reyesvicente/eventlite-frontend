@@ -25,10 +25,10 @@ it("should render an event summary card", () => {
     const tree = renderer
         .create(<EventSummary event={{
             id: 1,
-        title: 'My Test Event',
-        start_datetime: new Date('10 September 2020, 10:00 am'),
-        image_url: 'event.png'
-        }} />)
+            title: 'My Test Event',
+            start_datetime: new Date('10 September 2020, 10:00 am'),
+            image_url: 'event.png'
+            }} />)
         .toJSON()
     expect(tree).toMatchSnapshot()
 })
